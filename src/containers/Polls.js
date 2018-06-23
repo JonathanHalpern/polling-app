@@ -1,6 +1,7 @@
 // ./src/containers/Poll.js
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { Heading2 } from '../styledComponents/typography';
 
 import PollPreview from '../components/PollPreview';
 
@@ -42,10 +43,11 @@ class PollsContainer extends Component {
     const { polls, loading } = this.state;
     return (
       <div>
+        <Heading2>Current polls</Heading2>
         {loading ? (
           <p>Loading...</p>
         ) : (
-          polls.map(poll => <PollPreview {...poll} />)
+          polls.map(poll => <PollPreview {...poll} id={poll.id} />)
         )}
       </div>
     );

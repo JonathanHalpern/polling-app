@@ -1,9 +1,16 @@
 // ./src/pages/index.js
 import React from 'react';
 import Link from 'gatsby-link';
+import styled from 'styled-components';
 
 import { Button } from '../styledComponents/theme';
 import { Heading2 } from '../styledComponents/typography';
+
+const ButtonContainer = styled.div`
+  margin-top: 30px;
+  width: 100%;
+  min-height: 36px;
+`;
 
 const IndexPage = () => (
   <div>
@@ -16,9 +23,16 @@ const IndexPage = () => (
       ipsum ut pariatur. Mollit occaecat velit occaecat sint pariatur tempor.
       Consectetur culpa tempor dolore amet officia dolore nulla nisi sunt ea.
     </p>
-    <Link to="/new">
-      <Button>New Poll</Button>
-    </Link>
+    <ButtonContainer>
+      <Link to="/poll">
+        <Button>View Polls</Button>
+      </Link>
+    </ButtonContainer>
+    <ButtonContainer>
+      <Link to="/new">
+        <Button>New Poll</Button>
+      </Link>
+    </ButtonContainer>
   </div>
 );
 
