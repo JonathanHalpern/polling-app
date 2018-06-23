@@ -1,9 +1,10 @@
 // ./src/pages/poll/index.js
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import Poll from '../../containers/Poll';
+import Polls from '../../containers/Polls';
 
 const PollPage = ({ uid, signIn }) => {
   return (
@@ -11,7 +12,11 @@ const PollPage = ({ uid, signIn }) => {
       render={({ location }) => {
         return (
           <div>
-            <Route exact path="/poll/" render={() => <Redirect to="/" />} />
+            <Route
+              exact
+              path="/poll/"
+              render={props => <Polls {...props} uid={uid} signIn={signIn} />}
+            />
             <Route
               location={location}
               key={location.key}
