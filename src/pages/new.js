@@ -180,12 +180,12 @@ class NewPollPage extends Component {
   createPoll(pollId) {
     const { firebase } = this.context;
     const { options, title } = this.state;
-    const { history } = this.props;
-
+    const { history, uid } = this.props;
     firebase.polls
       .doc(pollId)
       .set({
         title,
+        authorId: uid,
         id: pollId,
         options: options.map(({ text, id }) => ({ text, optionId: id })),
       })
@@ -209,10 +209,9 @@ class NewPollPage extends Component {
     const { options, loading, title } = this.state;
     const optionsWithText = options.filter(({ text }) => !!text.trim());
     const disableCreate = !title || optionsWithText.length < 2 || loading;
-
     return (
       <div>
-        <Heading2>Create a new Poll</Heading2>
+        <Heading2>Create a new Poo</Heading2>
         <TitleContainer>
           <TitleLabel htmlFor="newPollTitle">Title</TitleLabel>
           <TitleInput

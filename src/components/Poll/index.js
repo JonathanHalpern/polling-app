@@ -89,16 +89,18 @@ const ButtonContainer = styled.div`
 
 const Poll = ({
   loading,
+  isAuthor,
   options,
   title,
   selection,
   hasVoted,
   onSelectOption,
   onVote,
+  onChangeVote,
+  onDelete,
 }) => {
   let optionsArray = Object.values(options);
   const renderOptions = !loading && optionsArray.length > 0;
-  const renderVoteButton = renderOptions && !hasVoted;
   const voteIsDisabled = loading || !selection;
   const totalVotes = optionsArray.reduce((aggr, curr) => aggr + curr.votes, 0);
 
@@ -108,6 +110,7 @@ const Poll = ({
 
   return (
     <Container>
+      {isAuthor ? <p>Your poll</p> : <p>Not yours</p>}
       <Heading2>{loading || !title ? 'loading...' : title}</Heading2>
       <div>
         {renderOptions &&
@@ -131,11 +134,16 @@ const Poll = ({
           })}
       </div>
       <ButtonContainer>
-        {renderVoteButton && (
+        {renderOptions && !hasVoted ? (
           <Button disabled={voteIsDisabled} onClick={!voteIsDisabled && onVote}>
             Vote
           </Button>
+        ) : (
+          <Button onClick={onChangeVote}>Change Vote</Button>
         )}
+      </ButtonContainer>
+      <ButtonContainer>
+        {isAuthor && <Button onClick={onDelete}>Delete Poll</Button>}
       </ButtonContainer>
     </Container>
   );
@@ -143,12 +151,15 @@ const Poll = ({
 
 Poll.propTypes = {
   loading: PropTypes.bool.isRequired,
+  isAuthor: PropTypes.bool.isRequired,
   options: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
   selection: PropTypes.string.isRequired,
   hasVoted: PropTypes.bool.isRequired,
   onSelectOption: PropTypes.func.isRequired,
   onVote: PropTypes.func.isRequired,
+  onChangeVote: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
 };
 
 export default Poll;

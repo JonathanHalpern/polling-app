@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-import Poll from '../components/Poll/index';
+import Poll from '../components/Poll';
 
 class PollContainer extends Component {
   static contextTypes = {
@@ -22,6 +22,7 @@ class PollContainer extends Component {
     // option data including results as the values
     options: {},
     loading: false,
+    isAuthor: false,
     selection: '',
     hasVoted: false,
   };
@@ -33,6 +34,7 @@ class PollContainer extends Component {
     if (match.params.pollId.length === 6) {
       if (uid) {
         this.checkVote(uid);
+        this.checkAuthor(uid);
       }
 
       this.setState({
@@ -44,7 +46,6 @@ class PollContainer extends Component {
         .then(doc => {
           if (doc.exists) {
             const { title, options } = doc.data();
-
             this.setState({
               loading: false,
               title,
@@ -83,6 +84,7 @@ class PollContainer extends Component {
     } else {
       // a uid exists, check if the user has already voted
       this.checkVote(nextUid);
+      this.checkAuthor(nextUid);
     }
   }
 
@@ -103,6 +105,37 @@ class PollContainer extends Component {
     // get the results sub-collection on the poll document
     return this.poll.collection('results');
   }
+
+  fetchOptions = () => {
+    const { history } = this.props;
+    this.poll
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          const { title, options } = doc.data();
+          this.setState({
+            loading: false,
+            title,
+            options: options.reduce((aggr, curr) => {
+              return {
+                ...aggr,
+                [curr.optionId]: {
+                  ...curr,
+                  votes: 0,
+                },
+              };
+            }, {}),
+          });
+        } else {
+          history.push('/404');
+        }
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        // TODO: notify the user of the error
+      });
+  };
 
   handleSelectOption = id => {
     this.setState({
@@ -144,6 +177,25 @@ class PollContainer extends Component {
     }
   };
 
+  handleChangeVote = () => {
+    const { options } = this.state;
+    this.setState({
+      hasVoted: false,
+    });
+    this.fetchOptions();
+  };
+
+  handleDelete = () => {
+    const { match, history } = this.props;
+    const { firebase } = this.context;
+    firebase.polls
+      .doc(match.params.pollId)
+      .delete()
+      .then(() => {
+        history.push('/');
+      });
+  };
+
   signInAnonymously() {
     const { signIn } = this.props;
 
@@ -152,6 +204,24 @@ class PollContainer extends Component {
       console.error(error);
       // TODO: notify the user of the error
     });
+  }
+
+  checkAuthor(uid) {
+    this.poll
+      .get()
+      .then(doc => {
+        if (doc.exists) {
+          const { authorId } = doc.data();
+          this.setState({
+            isAuthor: uid === authorId,
+          });
+        }
+      })
+      .catch(error => {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        // TODO: notify the user of the error
+      });
   }
 
   checkVote(uid) {
@@ -202,6 +272,7 @@ class PollContainer extends Component {
             });
           }
           if (change.type === 'removed') {
+            console.log('gone!!');
             // currently there's no way of changing a user's vote after it
             // has been saved. We could accomplish this by deleting the
             // user's uid document on the results sub-collection. This
@@ -223,6 +294,8 @@ class PollContainer extends Component {
         {...this.state}
         onSelectOption={this.handleSelectOption}
         onVote={this.handleVote}
+        onChangeVote={this.handleChangeVote}
+        onDelete={this.handleDelete}
       />
     );
   }
