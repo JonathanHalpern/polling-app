@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { arrayMove } from 'react-sortable-hoc';
 import shortId from 'short-id';
+import FileUploader from 'react-firebase-file-uploader';
 
 import { Button } from '../styledComponents/theme';
 import { Heading2 } from '../styledComponents/typography';
@@ -49,7 +50,11 @@ class NewPollPage extends Component {
   state = {
     title: '',
     options: [],
+    avatar: '',
     loading: false,
+    isUploading: false,
+    progress: 0,
+    avatarURL: '',
   };
 
   // to keep track of what item is being edited
@@ -109,6 +114,20 @@ class NewPollPage extends Component {
       }
 
       return option;
+    });
+
+    this.setState({
+      ...this.state,
+      options,
+    });
+  };
+
+  handleImageChange = image => {
+    const options = this.state.options.map(option => {
+      return {
+        ...option,
+        image,
+      };
     });
 
     this.setState({
@@ -179,7 +198,7 @@ class NewPollPage extends Component {
 
   createPoll(pollId) {
     const { firebase } = this.context;
-    const { options, title } = this.state;
+    const { options, title, avatarURL, avatar } = this.state;
     const { history, uid } = this.props;
     firebase.polls
       .doc(pollId)
@@ -187,6 +206,8 @@ class NewPollPage extends Component {
         title,
         authorId: uid,
         id: pollId,
+        imageUrl: avatarURL,
+        imageFile: avatar,
         options: options.map(({ text, id }) => ({ text, optionId: id })),
       })
       .then(() => {
@@ -205,10 +226,45 @@ class NewPollPage extends Component {
       });
   }
 
+  handleUploadStart = () => this.setState({ isUploading: true, progress: 0 });
+
+  handleProgress = progress => this.setState({ progress });
+
+  handleUploadError = error => {
+    this.setState({ isUploading: false });
+    console.error(error);
+  };
+
+  handleUploadSuccess = filename => {
+    const { firebase } = this.context;
+    this.setState({
+      avatar: filename,
+      progress: 100,
+      isUploading: false,
+    });
+    this.handleImageChange(filename);
+    console.log(this.state);
+    firebase
+      .storage()
+      .ref('images')
+      .child(filename)
+      .getDownloadURL()
+      .then(url => this.setState({ avatarURL: url }));
+  };
+
   render() {
-    const { options, loading, title } = this.state;
+    const { firebase } = this.context;
+    const {
+      options,
+      loading,
+      title,
+      isUploading,
+      progress,
+      avatarURL,
+    } = this.state;
     const optionsWithText = options.filter(({ text }) => !!text.trim());
     const disableCreate = !title || optionsWithText.length < 2 || loading;
+
     return (
       <div>
         <Heading2>Create a new Poo</Heading2>
@@ -220,6 +276,19 @@ class NewPollPage extends Component {
             onChange={this.handleTitleChange}
           />
         </TitleContainer>
+        {isUploading && <p>Progress: {progress}</p>}
+        {avatarURL && <img src={avatarURL} alt="" />}
+
+        <FileUploader
+          accept="image/*"
+          name="avatar"
+          randomizeFilename
+          storageRef={firebase.storage().ref('images')}
+          onUploadStart={this.handleUploadStart}
+          onUploadError={this.handleUploadError}
+          onUploadSuccess={this.handleUploadSuccess}
+          onProgress={this.handleProgress}
+        />
         <NewPoll
           options={options}
           onToggleEdit={this.handleToggleEdit}
@@ -234,7 +303,6 @@ class NewPollPage extends Component {
             onClick={!disableCreate && this.handleCreate}>
             {loading ? 'Creating...' : 'Create'}
           </Button>
-
           <CreateButton
             disabled={loading}
             onClick={!loading && this.handleAddItem}>

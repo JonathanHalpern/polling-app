@@ -15,11 +15,18 @@ class Firebase {
   constructor() {
     firebase.initializeApp(config);
     this.store = firebase.firestore;
+    this.storage = firebase.storage;
     this.auth = firebase.auth;
   }
 
   get polls() {
     return this.store().collection('polls');
+  }
+
+  get images() {
+    return this.storage()
+      .ref()
+      .child('images');
   }
 }
 

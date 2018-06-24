@@ -18,6 +18,7 @@ class PollContainer extends Component {
 
   state = {
     title: '',
+    imageUrl: '',
     // options is a map with the optionId as the keys and
     // option data including results as the values
     options: {},
@@ -45,10 +46,11 @@ class PollContainer extends Component {
         .get()
         .then(doc => {
           if (doc.exists) {
-            const { title, options } = doc.data();
+            const { title, options, imageUrl } = doc.data();
             this.setState({
               loading: false,
               title,
+              imageUrl,
               options: options.reduce((aggr, curr) => {
                 return {
                   ...aggr,
@@ -112,10 +114,11 @@ class PollContainer extends Component {
       .get()
       .then(doc => {
         if (doc.exists) {
-          const { title, options } = doc.data();
+          const { title, options, imageUrl } = doc.data();
           this.setState({
             loading: false,
             title,
+            imageUrl,
             options: options.reduce((aggr, curr) => {
               return {
                 ...aggr,

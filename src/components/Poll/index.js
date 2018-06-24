@@ -13,6 +13,10 @@ const Container = styled.section`
   align-items: center;
 `;
 
+const StyledImage = styled.img`
+  width: 250px;
+`;
+
 const OptionText = styled.span`
   flex: 10;
 `;
@@ -98,6 +102,7 @@ const Poll = ({
   onVote,
   onChangeVote,
   onDelete,
+  imageUrl,
 }) => {
   let optionsArray = Object.values(options);
   const renderOptions = !loading && optionsArray.length > 0;
@@ -133,6 +138,7 @@ const Poll = ({
             );
           })}
       </div>
+      <StyledImage src={imageUrl} alt="" />
       <ButtonContainer>
         {renderOptions && !hasVoted ? (
           <Button disabled={voteIsDisabled} onClick={!voteIsDisabled && onVote}>
@@ -160,6 +166,7 @@ Poll.propTypes = {
   onVote: PropTypes.func.isRequired,
   onChangeVote: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
+  imageUrl: PropTypes.string,
 };
 
 export default Poll;
