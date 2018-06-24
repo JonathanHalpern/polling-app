@@ -243,10 +243,7 @@ class NewPollPage extends Component {
       isUploading: false,
     });
     this.handleImageChange(filename);
-    console.log(this.state);
-    firebase
-      .storage()
-      .ref('images')
+    firebase.images
       .child(filename)
       .getDownloadURL()
       .then(url => this.setState({ avatarURL: url }));
