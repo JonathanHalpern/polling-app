@@ -249,8 +249,15 @@ class NewPollPage extends Component {
       .then(url => this.setState({ avatarURL: url }));
   };
 
-  render() {
+  componentWillMount() {
     const { firebase } = this.context;
+    console.log(firebase);
+    // firebase.images.then(image => {
+    //   console.log(image);
+    // });
+  }
+
+  render() {
     const {
       options,
       loading,
@@ -275,7 +282,6 @@ class NewPollPage extends Component {
         </TitleContainer>
         {isUploading && <p>Progress: {progress}</p>}
         {avatarURL && <img src={avatarURL} alt="" />}
-        {console.log(firebase.images)}
         {/* <FileUploader
           accept="image/*"
           name="avatar"
