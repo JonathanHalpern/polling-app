@@ -275,7 +275,7 @@ class NewPollPage extends Component {
         </TitleContainer>
         {isUploading && <p>Progress: {progress}</p>}
         {avatarURL && <img src={avatarURL} alt="" />}
-
+        {console.log(firebase.images)}
         {/* <FileUploader
           accept="image/*"
           name="avatar"
