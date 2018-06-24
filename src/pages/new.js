@@ -280,7 +280,7 @@ class NewPollPage extends Component {
           accept="image/*"
           name="avatar"
           randomizeFilename
-          storageRef={firebase.storage().ref('images')}
+          storageRef={firebase.images}
           onUploadStart={this.handleUploadStart}
           onUploadError={this.handleUploadError}
           onUploadSuccess={this.handleUploadSuccess}
