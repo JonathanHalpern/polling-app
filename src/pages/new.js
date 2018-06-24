@@ -276,7 +276,7 @@ class NewPollPage extends Component {
         {isUploading && <p>Progress: {progress}</p>}
         {avatarURL && <img src={avatarURL} alt="" />}
 
-        <FileUploader
+        {/* <FileUploader
           accept="image/*"
           name="avatar"
           randomizeFilename
@@ -285,7 +285,7 @@ class NewPollPage extends Component {
           onUploadError={this.handleUploadError}
           onUploadSuccess={this.handleUploadSuccess}
           onProgress={this.handleProgress}
-        />
+        /> */}
         <NewPoll
           options={options}
           onToggleEdit={this.handleToggleEdit}
