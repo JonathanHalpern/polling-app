@@ -249,15 +249,8 @@ class NewPollPage extends Component {
       .then(url => this.setState({ avatarURL: url }));
   };
 
-  componentWillMount() {
-    const { firebase } = this.context;
-    console.log(firebase);
-    // firebase.images.then(image => {
-    //   console.log(image);
-    // });
-  }
-
   render() {
+    const { firebase } = this.context;
     const {
       options,
       loading,
@@ -282,16 +275,18 @@ class NewPollPage extends Component {
         </TitleContainer>
         {isUploading && <p>Progress: {progress}</p>}
         {avatarURL && <img src={avatarURL} alt="" />}
-        {/* <FileUploader
-          accept="image/*"
-          name="avatar"
-          randomizeFilename
-          storageRef={firebase.images}
-          onUploadStart={this.handleUploadStart}
-          onUploadError={this.handleUploadError}
-          onUploadSuccess={this.handleUploadSuccess}
-          onProgress={this.handleProgress}
-        /> */}
+        {firebase && (
+          <FileUploader
+            accept="image/*"
+            name="avatar"
+            randomizeFilename
+            storageRef={firebase.images}
+            onUploadStart={this.handleUploadStart}
+            onUploadError={this.handleUploadError}
+            onUploadSuccess={this.handleUploadSuccess}
+            onProgress={this.handleProgress}
+          />
+        )}
         <NewPoll
           options={options}
           onToggleEdit={this.handleToggleEdit}
