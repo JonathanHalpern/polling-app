@@ -29,7 +29,11 @@ class Firebase {
   }
 
   get messaging() {
-    return this._messaging();
+    const a = this._messaging();
+    a.usePublicVapidKey(
+      'BM2fvm5_DRDs7t5YRCDhCF_Q7vANIPI9dJURQ0Gf3TkAVcwsTFGYR4saCuO0tlvTa8ZUGo6gV7pbIxjzwrtK5jM',
+    );
+    return a;
   }
 
   get images() {
