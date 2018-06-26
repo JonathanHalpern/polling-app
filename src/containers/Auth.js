@@ -5,9 +5,9 @@ const INITIAL_STATE = {
   uid: '',
   isAnonymous: null,
   // // some other properties from the user object that may be useful
-  // email: '',
-  // displayName: '',
-  // photoURL: '',
+  email: '',
+  displayName: '',
+  photoURL: '',
 };
 
 class Auth extends React.Component {
@@ -26,13 +26,13 @@ class Auth extends React.Component {
     // onAuthStateChanged returns an unsubscribe method
     this.stopAuthListener = auth().onAuthStateChanged(user => {
       if (user) {
-        // if user exists sign-in!
         this.signIn(user);
       } else {
         // otherwise sign-out!
         this.signOut();
       }
     });
+    this.requestMessagingPermission();
   }
 
   componentWillUnmount() {
@@ -78,12 +78,41 @@ class Auth extends React.Component {
     return auth().signOut();
   };
 
+  requestMessagingPermission() {
+    const { messaging } = this.context.firebase;
+    messaging.usePublicVapidKey(
+      'BM2fvm5_DRDs7t5YRCDhCF_Q7vANIPI9dJURQ0Gf3TkAVcwsTFGYR4saCuO0tlvTa8ZUGo6gV7pbIxjzwrtK5jM',
+    );
+    messaging
+      .requestPermission()
+      .then(() => {
+        console.log('got permission');
+        messaging.getToken();
+        // return messaging.getToken()
+      })
+      .then(token => {
+        // console.log(token)
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
+
   signIn(user) {
-    const { uid, isAnonymous } = user;
+    const { uid, isAnonymous, email, displayName, photoURL } = user;
+
+    // if (user != null) {
+    //   this.setState({
+    //   });
+    //   console.log(user.displayName);
+    // }
 
     this.setState({
       uid,
       isAnonymous,
+      email,
+      displayName,
+      photoURL,
     });
   }
 

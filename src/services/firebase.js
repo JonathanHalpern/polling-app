@@ -17,10 +17,19 @@ class Firebase {
     this.store = firebase.firestore;
     this.storage = firebase.storage;
     this.auth = firebase.auth;
+    this._messaging = firebase.messaging;
   }
 
   get polls() {
     return this.store().collection('polls');
+  }
+
+  get messages() {
+    return this.store().collection('messages');
+  }
+
+  get messaging() {
+    return this._messaging();
   }
 
   get images() {
