@@ -32,7 +32,7 @@ class Auth extends React.Component {
         this.signOut();
       }
     });
-    this.requestMessagingPermission();
+    // this.requestMessagingPermission();
   }
 
   componentWillUnmount() {
@@ -85,8 +85,9 @@ class Auth extends React.Component {
       .requestPermission()
       .then(() => {
         console.log('got permission');
-        messaging.getToken();
-        // return messaging.getToken()
+        // messaging.getToken();
+        console.log(messaging);
+        return messaging.getToken();
       })
       .then(token => {
         // console.log(token)

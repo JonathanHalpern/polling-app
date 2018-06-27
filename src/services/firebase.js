@@ -17,7 +17,14 @@ class Firebase {
     this.store = firebase.firestore;
     this.storage = firebase.storage;
     this.auth = firebase.auth;
-    this._messaging = firebase.messaging;
+    // this._messaging = firebase.messaging;
+    const messaging = firebase.messaging();
+    messaging.usePublicVapidKey(
+      'BM2fvm5_DRDs7t5YRCDhCF_Q7vANIPI9dJURQ0Gf3TkAVcwsTFGYR4saCuO0tlvTa8ZUGo6gV7pbIxjzwrtK5jM',
+    );
+    messaging.getToken().then(refreshedToken => {
+      console.log('Token refreshed.');
+    });
   }
 
   get polls() {
@@ -28,13 +35,13 @@ class Firebase {
     return this.store().collection('messages');
   }
 
-  get messaging() {
-    const a = this._messaging();
-    a.usePublicVapidKey(
-      'BM2fvm5_DRDs7t5YRCDhCF_Q7vANIPI9dJURQ0Gf3TkAVcwsTFGYR4saCuO0tlvTa8ZUGo6gV7pbIxjzwrtK5jM',
-    );
-    return a;
-  }
+  // get messaging() {
+  //   const a = this._messaging();
+  //   // a.usePublicVapidKey(
+  //   //   'BM2fvm5_DRDs7t5YRCDhCF_Q7vANIPI9dJURQ0Gf3TkAVcwsTFGYR4saCuO0tlvTa8ZUGo6gV7pbIxjzwrtK5jM',
+  //   // );
+  //   return a;
+  // }
 
   get images() {
     return this.storage()
