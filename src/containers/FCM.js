@@ -34,6 +34,9 @@ class FCM extends React.Component {
 
   requestMessagingPermission() {
     const { messaging } = this.context.firebase;
+    messaging.usePublicVapidKey(
+      'BM2fvm5_DRDs7t5YRCDhCF_Q7vANIPI9dJURQ0Gf3TkAVcwsTFGYR4saCuO0tlvTa8ZUGo6gV7pbIxjzwrtK5jM',
+    );
 
     messaging
       .requestPermission()
