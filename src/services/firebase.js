@@ -19,12 +19,24 @@ class Firebase {
     this.auth = firebase.auth;
     // this._messaging = firebase.messaging;
     const messaging = firebase.messaging();
+    console.log(messaging);
     messaging.usePublicVapidKey(
       'BM2fvm5_DRDs7t5YRCDhCF_Q7vANIPI9dJURQ0Gf3TkAVcwsTFGYR4saCuO0tlvTa8ZUGo6gV7pbIxjzwrtK5jM',
     );
-    messaging.getToken().then(refreshedToken => {
-      console.log(refreshedToken);
-    });
+    console.log(messaging);
+
+    messaging
+      .requestPermission()
+      .then(() => {
+        console.log('got permission');
+        return messaging.getToken();
+      })
+      .then(token => {
+        console.log(token);
+      })
+      .catch(err => {
+        console.log(err);
+      });
   }
 
   get polls() {
