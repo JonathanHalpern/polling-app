@@ -22,7 +22,7 @@ const PollPreview = ({ title, id }) => {
 
 PollPreview.propTypes = {
   title: PropTypes.string.isRequired,
-  id: PropTypes.number.isRequired,
+  id: PropTypes.string.isRequired,
 };
 
 export default PollPreview;

@@ -47,7 +47,7 @@ class PollsContainer extends Component {
         {loading ? (
           <p>Loading...</p>
         ) : (
-          polls.map(poll => <PollPreview {...poll} id={poll.id} />)
+          polls.map(poll => <PollPreview {...poll} key={poll.id} />)
         )}
       </div>
     );

@@ -42,34 +42,57 @@ class PollContainer extends Component {
         loading: true,
       });
 
-      this.poll
-        .get()
-        .then(doc => {
-          if (doc.exists) {
-            const { title, options, imageUrl } = doc.data();
-            this.setState({
-              loading: false,
-              title,
-              imageUrl,
-              options: options.reduce((aggr, curr) => {
-                return {
-                  ...aggr,
-                  [curr.optionId]: {
-                    ...curr,
-                    votes: 0,
-                  },
-                };
-              }, {}),
-            });
-          } else {
-            history.push('/404');
-          }
-        })
-        .catch(error => {
-          // eslint-disable-next-line no-console
-          console.error(error);
-          // TODO: notify the user of the error
-        });
+      this.poll.onSnapshot(doc => {
+        console.log('Current data: ', doc.data());
+        if (doc.exists) {
+          const { title, options, imageUrl } = doc.data();
+          this.setState({
+            loading: false,
+            title,
+            imageUrl,
+            options: options.reduce((aggr, curr) => {
+              return {
+                ...aggr,
+                [curr.optionId]: {
+                  ...curr,
+                  votes: 0,
+                },
+              };
+            }, {}),
+          });
+        } else {
+          history.push('/404');
+        }
+      });
+
+      // this.poll
+      //   .get()
+      //   .then(doc => {
+      //     if (doc.exists) {
+      //       const { title, options, imageUrl } = doc.data();
+      //       this.setState({
+      //         loading: false,
+      //         title,
+      //         imageUrl,
+      //         options: options.reduce((aggr, curr) => {
+      //           return {
+      //             ...aggr,
+      //             [curr.optionId]: {
+      //               ...curr,
+      //               votes: 0,
+      //             },
+      //           };
+      //         }, {}),
+      //       });
+      //     } else {
+      //       history.push('/404');
+      //     }
+      //   })
+      //   .catch(error => {
+      //     // eslint-disable-next-line no-console
+      //     console.error(error);
+      //     // TODO: notify the user of the error
+      //   });
     } else {
       history.push('/404');
     }
