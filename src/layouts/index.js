@@ -5,6 +5,7 @@ import Helmet from 'react-helmet';
 import { withPrefix } from 'gatsby-link';
 
 import Auth from '../containers/Auth';
+import FCM from '../containers/FCM';
 import Header from '../components/Header';
 import { Container as BaseContainerStyles } from '../styledComponents/layout';
 
@@ -53,6 +54,7 @@ const TemplateWrapper = ({ children, data, ...props }) => (
             title={data.site.siteMetadata.title}
             {...auth}
           />
+          {auth.uid && <FCM uid={auth.uid} />}
           <Container>
             {children({
               ...props,

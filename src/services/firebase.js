@@ -14,46 +14,29 @@ const config = {
 class Firebase {
   constructor() {
     firebase.initializeApp(config);
-    this.store = firebase.firestore;
+    this.store = firebase.firestore();
+    const settings = { /* your settings... */ timestampsInSnapshots: true };
+    this.store.settings(settings);
     this.storage = firebase.storage;
     this.auth = firebase.auth;
-    // this._messaging = firebase.messaging;
-    const messaging = firebase.messaging();
-    console.log(messaging);
-    messaging.usePublicVapidKey(
-      'BM2fvm5_DRDs7t5YRCDhCF_Q7vANIPI9dJURQ0Gf3TkAVcwsTFGYR4saCuO0tlvTa8ZUGo6gV7pbIxjzwrtK5jM',
-    );
-    console.log(messaging);
+    this._messaging = firebase.messaging;
+  }
 
-    messaging
-      .requestPermission()
-      .then(() => {
-        console.log('got permission');
-        return messaging.getToken();
-      })
-      .then(token => {
-        console.log(token);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+  get users() {
+    return this.store.collection('users');
   }
 
   get polls() {
-    return this.store().collection('polls');
+    return this.store.collection('polls');
   }
 
   get messages() {
-    return this.store().collection('messages');
+    return this.store.collection('messages');
   }
 
-  // get messaging() {
-  //   const a = this._messaging();
-  //   // a.usePublicVapidKey(
-  //   //   'BM2fvm5_DRDs7t5YRCDhCF_Q7vANIPI9dJURQ0Gf3TkAVcwsTFGYR4saCuO0tlvTa8ZUGo6gV7pbIxjzwrtK5jM',
-  //   // );
-  //   return a;
-  // }
+  get messaging() {
+    return this._messaging();
+  }
 
   get images() {
     return this.storage()

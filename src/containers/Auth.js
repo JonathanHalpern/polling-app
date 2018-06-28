@@ -32,7 +32,6 @@ class Auth extends React.Component {
         this.signOut();
       }
     });
-    // this.requestMessagingPermission();
   }
 
   componentWillUnmount() {
@@ -77,25 +76,6 @@ class Auth extends React.Component {
 
     return auth().signOut();
   };
-
-  requestMessagingPermission() {
-    const { messaging } = this.context.firebase;
-
-    messaging
-      .requestPermission()
-      .then(() => {
-        console.log('got permission');
-        // messaging.getToken();
-        console.log(messaging);
-        return messaging.getToken();
-      })
-      .then(token => {
-        // console.log(token)
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
 
   signIn(user) {
     const { uid, isAnonymous, email, displayName, photoURL } = user;
