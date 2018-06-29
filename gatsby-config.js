@@ -19,7 +19,6 @@ module.exports = {
         background_color: '#08AEEA',
         theme_color: '#2AF598',
         display: 'minimal-ui',
-        gcm_sender_id: '103953800507',
         icons: [
           {
             src: `/favicons/android-chrome-192x192.png`,
